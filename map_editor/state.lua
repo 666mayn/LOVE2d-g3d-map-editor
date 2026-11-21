@@ -1,5 +1,5 @@
 -- map_editor/state.lua : the editor as a gamestate table (no dependencies). Use it with hump.gamestate,
--- or call its callbacks yourself - see "Opening the editor" in map_editor/README.md.
+-- or call its callbacks yourself - see "Add it to your own game" in the README.
 --
 --   local Editor = require "map_editor.state"
 --   Editor.onExit = function() ... return to your game / menu ... end     -- called by F10 / the Exit button

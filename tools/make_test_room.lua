@@ -1,5 +1,5 @@
 -- Regenerates map_editor/maps/test_room.lua (two rooms + a courtyard) from the project root:
---   lua map_editor/tools/make_test_room.lua
+--   lua tools/make_test_room.lua
 -- Every block uses one of the surface types (see map_editor/surfaces.lua).
 package.path = "./?.lua;./?/init.lua;" .. package.path
 local Map = require("map_editor.map")

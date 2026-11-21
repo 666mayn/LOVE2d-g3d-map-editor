@@ -8,14 +8,16 @@ local Mesher = {}
 local CS = 16
 local CS2 = CS * CS
 
--- Face table: normal n, tangents u,v, directional shade
+-- Face table: normal n, tangents u,v, directional shade.
+-- `flip` marks the faces where u x v points INTO the block (-x, +y, -z): their triangles are emitted in
+-- reverse order so every face winds counter-clockwise seen from outside (back-face culling needs this).
 local FACES = {
   { n = { 1, 0, 0 },  u = { 0, 1, 0 }, v = { 0, 0, 1 }, shade = 0.80 },
-  { n = { -1, 0, 0 }, u = { 0, 1, 0 }, v = { 0, 0, 1 }, shade = 0.80 },
-  { n = { 0, 1, 0 },  u = { 1, 0, 0 }, v = { 0, 0, 1 }, shade = 0.66 },
+  { n = { -1, 0, 0 }, u = { 0, 1, 0 }, v = { 0, 0, 1 }, shade = 0.80, flip = true },
+  { n = { 0, 1, 0 },  u = { 1, 0, 0 }, v = { 0, 0, 1 }, shade = 0.66, flip = true },
   { n = { 0, -1, 0 }, u = { 1, 0, 0 }, v = { 0, 0, 1 }, shade = 0.66 },
   { n = { 0, 0, 1 },  u = { 1, 0, 0 }, v = { 0, 1, 0 }, shade = 1.00 },
-  { n = { 0, 0, -1 }, u = { 1, 0, 0 }, v = { 0, 1, 0 }, shade = 0.50 },
+  { n = { 0, 0, -1 }, u = { 1, 0, 0 }, v = { 0, 1, 0 }, shade = 0.50, flip = true },
 }
 local AO = { [0] = 0.50, 0.70, 0.86, 1.00 } -- indexed by number of free neighbours
 local CORNERS = { { 0, 0 }, { 1, 0 }, { 1, 1 }, { 0, 1 } }
@@ -70,9 +72,9 @@ function Mesher.buildChunk(map, chunk)
         -- flip the quad diagonal to avoid the classic AO anisotropy artefact
         local order
         if ao[1] + ao[3] > ao[2] + ao[4] then
-          order = { 2, 3, 4, 2, 4, 1 }
+          order = f.flip and { 2, 4, 3, 2, 1, 4 } or { 2, 3, 4, 2, 4, 1 }
         else
-          order = { 1, 2, 3, 1, 3, 4 }
+          order = f.flip and { 1, 3, 2, 1, 4, 3 } or { 1, 2, 3, 1, 3, 4 }
         end
         for k = 1, 6 do
           local ci = order[k]
@@ -101,7 +103,7 @@ function Mesher.cubeVerts(r, g, b, a, centered)
   for _, f in ipairs(FACES) do
     local n, tu, tv = f.n, f.u, f.v
     local bx, by, bz = n[1] > 0 and 1 or 0, n[2] > 0 and 1 or 0, n[3] > 0 and 1 or 0
-    for _, ci in ipairs({ 1, 2, 3, 1, 3, 4 }) do
+    for _, ci in ipairs(f.flip and { 1, 3, 2, 1, 4, 3 } or { 1, 2, 3, 1, 3, 4 }) do
       local ca, cb = CORNERS[ci][1], CORNERS[ci][2]
       local sh = f.shade
       verts[#verts + 1] = {

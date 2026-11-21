@@ -88,6 +88,22 @@ for _, vert in ipairs(v) do
   if vert[1] < 0 or vert[1] > 1 or vert[2] < 0 or vert[2] > 1 or vert[3] < 0 or vert[3] > 1 then okfmt = false end
 end
 check("all vertices numeric, inside unit cube", okfmt)
+-- winding: every triangle must be counter-clockwise seen from outside (matches its normal), on all 6 faces,
+-- including the flipped-diagonal AO case. Back-face culling hides triangles that are wound the other way.
+local function windingOk(verts)
+  for i = 1, #verts, 3 do
+    local a, b, c = verts[i], verts[i + 1], verts[i + 2]
+    local ux, uy, uz = b[1] - a[1], b[2] - a[2], b[3] - a[3]
+    local vx, vy, vz = c[1] - a[1], c[2] - a[2], c[3] - a[3]
+    local cx, cy, cz = uy * vz - uz * vy, uz * vx - ux * vz, ux * vy - uy * vx
+    if cx * a[6] + cy * a[7] + cz * a[8] <= 0 then return false, i end
+  end
+  return true
+end
+check("every face of a block winds counter-clockwise from outside", windingOk(v))
+local mw = Map.new(); mw:set(0, 0, 0, 1); mw:set(1, 1, 1, 1); mw:set(-1, 0, 1, 1); mw:set(0, 0, 2, 1)
+check("winding stays correct with AO diagonal flips", windingOk(Mesher.buildChunk(mw, mw.chunks[Map.chunkKey(0, 0, 0)])))
+check("cursor cube winds counter-clockwise too", windingOk(Mesher.cubeVerts(1, 1, 1, 1, true)))
 -- shading: top brighter than bottom for the same block
 local topSum, botSum = 0, 0
 for _, vert in ipairs(v) do

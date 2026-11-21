@@ -1,4 +1,4 @@
--- Regenerates map_editor/maps/demo.lua. From the project root:  lua map_editor/tools/make_demo.lua
+-- Regenerates map_editor/maps/demo.lua. From the project root:  lua tools/make_demo.lua
 -- Also a small example of building a map from code.
 package.path = "./?.lua;./?/init.lua;" .. package.path
 local Map = require("map_editor.map")

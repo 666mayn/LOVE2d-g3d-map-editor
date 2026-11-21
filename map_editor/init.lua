@@ -8,7 +8,7 @@
 --   level.map:isSolid(x, y, z)         -- collision queries
 --   level.map:firstEntity("player_start")
 --
---   -- the editor itself, as a gamestate (works with hump.gamestate or by hand, see map_editor/README.md):
+--   -- the editor itself, as a gamestate (works with hump.gamestate or by hand, see the README):
 --   local State = require("map_editor.state")
 --
 --   -- or drive the Editor object directly:

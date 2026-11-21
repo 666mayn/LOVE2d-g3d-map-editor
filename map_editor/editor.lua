@@ -763,11 +763,11 @@ function Editor:rebuildGrid()
     local w = major and 0.05 or 0.025
     local a = major and 0.38 or 0.17
     local r, g, b = tint[1], tint[2], tint[3]
-    local r2, g2, b2, a2 = r, g, b, a
+    local r2, g2, b2, a2, w2 = r, g, b, a, w
     if gx == 0 then g, r, b, a, w = 1, 0.35, 0.35, 0.95, 0.08 end   -- the Y axis (line at x = 0)
     quad(gx - w / 2, cy - N, gx + w / 2, cy + N, r, g, b, a)
-    if gy == 0 then r2, g2, b2, a2, w = 1, 0.3, 0.3, 0.95, 0.08 end -- the X axis (line at y = 0)
-    quad(cx - N, gy - w / 2, cx + N, gy + w / 2, r2, g2, b2, a2)
+    if gy == 0 then r2, g2, b2, a2, w2 = 1, 0.3, 0.3, 0.95, 0.08 end -- the X axis (line at y = 0)
+    quad(cx - N, gy - w2 / 2, cx + N, gy + w2 / 2, r2, g2, b2, a2)
   end
   self.gridModel = self.g3d.newModel(verts, self.texture)
 end

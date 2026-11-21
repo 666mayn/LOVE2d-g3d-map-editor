@@ -1,10 +1,11 @@
--- Example main.lua showing how to wire map_editor into a LÖVE + g3d project.
--- Copy it to your project root as main.lua (or merge the pieces into your own). Needs: g3d somewhere on the
--- require path (g3d/, libs/g3d/, lib/g3d/ ...) and the map_editor/ folder next to main.lua.
+-- Demo runner for map_editor. Run it with:  love .
+-- Needs g3d at ./g3d (see README). It is also the example to copy when wiring the editor into your own game.
 --
 --   F8   game -> editor  (opens the level you are looking at)
 --   F10  editor -> game  (asks first if there are unsaved changes)
 --   F6   in the editor: play the saved map right now
+--
+-- Your conf.lua needs a window depth buffer (see conf.lua): without a depth buffer 3D looks see-through.
 --
 -- The tiny "game" here is just a free-fly camera, replace it with yours.
 
@@ -20,6 +21,7 @@ local function startGame(path)
   level = assert(mapedit.loadLevel(levelPath, g3d))
   local s = level.map:firstEntity("player_start")
   if s then g3d.camera.lookInDirection(s.x, s.y, s.z + 1.6, math.rad(s.yaw or 0), 0) end
+  love.graphics.setBackgroundColor(level.map.sky[1], level.map.sky[2], level.map.sky[3])
   mode = "game"
   g3d.camera.resize(love.graphics.getDimensions())
   love.mouse.setRelativeMode(true)
