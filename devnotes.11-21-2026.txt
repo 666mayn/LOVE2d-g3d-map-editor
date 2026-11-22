@@ -1,0 +1,22 @@
+the day is technically over, but I thought I'd write a 'where we at?' sort of devnote for the map editor
+I am currently working on a plethora of tools that are going to built TOGETHER in the end
+as a sort of 'ultimate-devtool' for love2d. Idk how it will end up functioning exactly,
+but the work is currently being done to build the actual pieces of this puzzle,
+and the map editor is a big part of that, so updates will continue. But for now, I am working hard
+on the ultimate ui tool, simply because it needs more work than the map editor,
+because the map editor leans pretty heavily on g3d, which I can hopefully change in the future,
+simply because I cannot legally package g3d with the whole thing in the end.
+
+anyway
+im tired and im going to bed
+goodnight
+
+local mayn = { awake = true, asleep = false }
+
+function mayn.sleep()
+    mayn.awake, mayn.asleep = false, true
+    print("mayn is going to sleep... zzz")
+    return mayn.asleep
+end
+
+return mayn
