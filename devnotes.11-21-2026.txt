@@ -19,4 +19,4 @@ function mayn.sleep()
     return mayn.asleep
 end
 
-return mayn
+print("mayn.out() -> " .. tostring(mayn.sleep()))   -- mayn.out() -> true
